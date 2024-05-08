@@ -26,7 +26,7 @@ export default function AccountMenu() {
   const logOut = () => {
     localStorage.removeItem("token");
     removeDataFromCookie("token");
-    removeDataFromCookie("email");
+    removeDataFromCookie("user_id");
     navigate("/signin");
     window.location.reload()
   }

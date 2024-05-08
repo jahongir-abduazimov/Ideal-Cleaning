@@ -11,13 +11,13 @@ const index = () => {
   const [params] = useState({
     page: 1,
     limit: 10,
-    owner_email: getDataFromCookie("email"),
+    owner_id: getDataFromCookie("user_id"),
   });
   const getData = async () => {
     setLoading(true);
     try {
       const response = await services.get_services(params);
-      response.data.services.forEach((item: any, index: number) => {
+      response?.data?.services.forEach((item: any, index: number) => {
         item.index = index + 1;
       });
       setData(response?.data?.services);
@@ -58,9 +58,9 @@ const index = () => {
             </IconButton>
           </Paper>
         </div>
-        <Modal/>
+        <Modal getData={getData}/>
       </div>
-      <GlobalTable headers={headers} body={data} isLoading={isloading} />
+      <GlobalTable headers={headers} body={data} isLoading={isloading} getData={getData}/>
     </div>
   );
 };

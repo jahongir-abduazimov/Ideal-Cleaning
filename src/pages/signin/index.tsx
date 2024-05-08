@@ -27,7 +27,7 @@ const index = () => {
       if (response.status === 200) {
         localStorage.setItem("token", response?.data?.access_token);
         setDataToCookie("token", response?.data?.access_token);
-        setDataToCookie("email", response?.data?.email);
+        setDataToCookie("user_id", response?.data?.id);
         setTimeout(() => {
           navigate("/");
         }, 3000);
