@@ -1,15 +1,16 @@
-import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import Notification from '../../../utils/notification'
 // import { Field, Formik } from "formik";
 // import { Form } from "react-router-dom";
 import { TextField } from "@mui/material";
+import { ErrorMessage, Field, Formik, Form } from "formik";
+import { servicesValidationSchema } from "@validation";
+import { post } from "../../../types/interface/services";
+import useServiceStore from "../../../store/service";
 import { getDataFromCookie } from "@data-service";
-import { services } from "@service";
-import { ToastContainer } from "react-toastify";
+import Notification from "../../../utils/notification";
 
 const style = {
   position: "absolute" as "absolute",
@@ -22,77 +23,109 @@ const style = {
   p: 4,
 };
 
-export default function BasicModal({getData}:any) {
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const postData = async (e: any) => {
-    e.preventDefault();
-    const payload: any = {
-      name: e.target[0].value,
-      price: +e.target[2].value,
+export default function BasicModal({ open, handleClose, item }: any) {
+  const { postData, updateData } = useServiceStore();
+  const initialValues: post = {
+    name: item.name || "",
+    price: item.price || "",
+  };
+  const handleSubmit = async (values: post) => {
+    const payload = {
+      ...values,
+      price: Number(values.price),
       owner_id: getDataFromCookie("user_id"),
     };
-    try {
-      const response = await services.post_services(payload);
-      console.log(response);
-      if (response.status === 201) {
+    if (!item.id) {
+      const status = await postData(payload);
+      if (status === 201) {
         handleClose();
-        getData()
         Notification({
           title: "Xizmat muvaffaqiyatli qo'shildi",
           type: "success",
         });
+      } else {
+        Notification({ title: "Xatolik yuz berdi", type: "error" });
       }
-    } catch (error) {
-      console.error(error);
+    } else {
+      const status = await updateData({...payload, id: item.id });
+      if (status === 200) {
+        handleClose();
+        Notification({
+          title: "Xizmat nomi o'zgartirildi",
+          type: "success",
+        });
+      }
     }
+    console.log(item);
   };
 
   return (
-    
     <div>
-      <ToastContainer />
-      <Button variant="contained" color="primary" onClick={handleOpen}>
-        Xizmat qo'shish
-      </Button>
       <Modal
+        keepMounted
         open={open}
         onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+        aria-labelledby="keep-mounted-modal-title"
+        aria-describedby="keep-mounted-modal-description"
       >
         <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
+          <Typography
+            id="keep-mounted-modal-title"
+            className="text-center"
+            variant="h6"
+            component="h2"
+          >
             Xizmat qo'shish
           </Typography>
-          <form onSubmit={(e) => postData(e)}>
-            <label className="block w-full p-[10px]">
-              <TextField
-                className="w-full"
-                label="Xizmat nomini kiriting"
-                id="Outlined"
+          <Formik
+            initialValues={initialValues}
+            validationSchema={servicesValidationSchema}
+            onSubmit={handleSubmit}
+          >
+            <Form>
+              <Field
+                name="name"
+                type="text"
+                as={TextField}
+                label="Xizmat nomi"
+                fullWidth
+                margin="normal"
                 variant="outlined"
+                helperText={
+                  <ErrorMessage
+                    name="name"
+                    component="span"
+                    className="text-[red] text-[15px]"
+                  />
+                }
               />
-            </label>
-            <label className="block w-full p-[10px]">
-              <TextField
-                autoComplete="off"
-                className="w-full"
-                label="Xizmat narxini kiriting"
-                id="Outlined"
-                variant="outlined"
+              <Field
+                name="price"
                 type="number"
+                as={TextField}
+                label="Xizmat narxi"
+                fullWidth
+                margin="normal"
+                variant="outlined"
+                helperText={
+                  <ErrorMessage
+                    name="price"
+                    component="span"
+                    className="text-[red] text-[15px]"
+                  />
+                }
               />
-            </label>
-            <Button
-              type="submit"
-              variant="contained"
-              fullWidth
-            >
-              Qo'shish
-            </Button>
-          </form>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                fullWidth
+                sx={{ mt: 2 }}
+              >
+                Qo'shish
+              </Button>
+            </Form>
+          </Formik>
         </Box>
       </Modal>
     </div>

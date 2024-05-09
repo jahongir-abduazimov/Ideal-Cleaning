@@ -17,6 +17,5 @@ export interface TableProps {
     headers: Header[],
     body: BodyItem[],
     isLoading: boolean,
-    getData: () => void,
-    
+    editItem: (id: any) => any,
 }

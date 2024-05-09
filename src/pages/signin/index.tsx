@@ -6,7 +6,6 @@ import { Signin } from "@auth-interface";
 import { SignInModal } from "@modals";
 import { auth } from "@service";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
 import Notification from "../../utils/notification";
 import { useState, useEffect } from "react";
 import { setDataToCookie } from "@data-service";
@@ -28,9 +27,7 @@ const index = () => {
         localStorage.setItem("token", response?.data?.access_token);
         setDataToCookie("token", response?.data?.access_token);
         setDataToCookie("user_id", response?.data?.id);
-        setTimeout(() => {
           navigate("/");
-        }, 3000);
         Notification({
           title: "Siz muvaffaqiyatli kirdingiz",
           type: "success",
@@ -51,7 +48,6 @@ const index = () => {
   }, []);
   return (
     <>
-      <ToastContainer />
       <SignInModal
         open={modal}
         handleClose={() => {

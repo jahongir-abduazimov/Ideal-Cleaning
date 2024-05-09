@@ -13,31 +13,22 @@ import { Skeleton } from "@mui/material";
 import { TableProps } from "@global-interface";
 import del from "../../assets/delete-icon.svg";
 import edit from "../../assets/edit-icon.svg";
-import { services } from "@service";
-// import Notification from "../../utils/notification";
-// import { ToastContainer } from "react-toastify";
+import useServiceStore from "../../store/service";
+import Notification from "../../utils/notification";
 
-const GlobalTable = ({ headers, body, isLoading, getData }: TableProps) => {
-  const deleteItem = async (id: number) => {
-    try {
-      const response = await services.delete_services(id);
-      if (response.status === 200) {
-        getData();
-        // Notification({
-        //   title: "xizmat muvaffaqiyatli o'chirildi",
-        //   type: "success",
-        // });
-      }
-    } catch (error) {
-      console.error(error);
+const GlobalTable = ({ headers, body, isLoading, editItem }: TableProps) => {
+  const {deleteData} = useServiceStore();
+  const deleteItem = async (id: any) => {
+    const status = await deleteData(id);
+    if (status === 200) {
+      Notification({
+        title: "Xizmat muvaffaqiyatli o'chirildi",
+        type: "success",
+      });
     }
-  };
-  const editItem = (id: number) => {
-    console.log(id);
   };
   return (
     <>
-      {/* <ToastContainer /> */}
       <Box sx={{ width: "100%" }}>
         <Paper sx={{ width: "100%", mb: 2 }}>
           <TableContainer>
@@ -85,11 +76,11 @@ const GlobalTable = ({ headers, body, isLoading, getData }: TableProps) => {
                                   className="border border-gray-300 p-[9px] rounded-md active:bg-gray-300 duration-150 bg-gray-200 cursor-pointer"
                                   src={edit}
                                   alt="edit"
-                                  onClick={() => editItem(item.id)}
+                                  onClick={()=>editItem(item)}
                                 />
                               </div>
-                            ) : item[header.value].title ? (
-                              item[header.value].title
+                            ) : item[header.value] ? (
+                              item[header.value]
                             ) : (
                               item[header.value]
                             )}

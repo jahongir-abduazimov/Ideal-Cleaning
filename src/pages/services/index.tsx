@@ -1,42 +1,40 @@
 import GlobalTable from "../../components/ui/table";
 import { useEffect, useState } from "react";
 import { getDataFromCookie } from "@data-service";
-import { services } from "@service";
-import { IconButton, InputBase, Paper } from "@mui/material";
+import { Button, IconButton, InputBase, Paper } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import Modal from '../../components/modal/services'
+import Modal from "../../components/modal/services";
+import useServiceStore from "../../store/service";
 const index = () => {
-  const [data, setData] = useState([]);
-  const [isloading, setLoading] = useState(false);
+  const { getData, data, isLoading } = useServiceStore();
+  const [modal, setModal] = useState(false);
+  const [item, setItem] = useState({});
   const [params] = useState({
     page: 1,
     limit: 10,
     owner_id: getDataFromCookie("user_id"),
   });
-  const getData = async () => {
-    setLoading(true);
-    try {
-      const response = await services.get_services(params);
-      response?.data?.services.forEach((item: any, index: number) => {
-        item.index = index + 1;
-      });
-      setData(response?.data?.services);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  
   useEffect(() => {
-    getData();
-  }, [params]);
+    getData(params);
+  }, [params, getData]);
   const headers = [
     { title: "№", value: "index" },
     { title: "Xizmat nomi", value: "name" },
     { title: "Xizmat narxi", value: "price" },
     { title: "", value: "action" },
   ];
+  const editItem = (item: any) => {
+    setModal(true);
+    setItem(item);
+  }
+  const handleClose = () => {
+    setModal(false);
+    setItem({});
+  }
   return (
     <div>
+      {modal && <Modal open={modal} handleClose={handleClose} item={item}/>}
       <div className="py-3 flex justify-between items-center">
         <div className="w-96">
           <Paper
@@ -58,9 +56,16 @@ const index = () => {
             </IconButton>
           </Paper>
         </div>
-        <Modal getData={getData}/>
+        <Button variant="contained" color="primary" onClick={()=>setModal(true)}>
+        Xizmat qo'shish
+      </Button>
       </div>
-      <GlobalTable headers={headers} body={data} isLoading={isloading} getData={getData}/>
+      <GlobalTable
+        headers={headers}
+        body={data}
+        isLoading={isLoading}
+        editItem={editItem}
+      />
     </div>
   );
 };
