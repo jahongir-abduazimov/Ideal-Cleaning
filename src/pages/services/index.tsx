@@ -65,7 +65,6 @@ const index = () => {
         body={data}
         isLoading={isLoading}
         editItem={editItem}
-        delItem={() => {}}
       />
     </div>
   );

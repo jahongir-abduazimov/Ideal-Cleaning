@@ -12,7 +12,7 @@ export interface post {
 export interface Request {
     get_orders: (params: GetParams) => Promise<any>
     post_order: (data: any) => Promise<any>
-    delete_order: (id:string) => Promise<any>
+    // delete_order: (id:string) => Promise<any>
     // update_service: (data:UpdateService) => Promise<any>
 }
 
@@ -21,5 +21,5 @@ export interface OrderStore {
     isLoading: boolean,
     getOrders:(params: GetParams) => Promise<any>,
     postOrder:(data: any) => Promise<any>
-    deleteOrder:(id: string) => Promise<any>
+    // deleteOrder:(id: string) => Promise<any>
 }

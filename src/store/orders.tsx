@@ -28,13 +28,13 @@ const useOrderStore = create<OrderStore>((set) => ({
       console.error(error);
     }
   },
-  deleteOrder: async (id) => {
-    try {
-      const response = await orders.delete_order(id);
-      return response;
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  // deleteOrder: async (id) => {
+  //   try {
+  //     const response = await orders.delete_order(id);
+  //     return response;
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
 }));
 export default useOrderStore;
