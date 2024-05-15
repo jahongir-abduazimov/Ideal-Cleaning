@@ -32,7 +32,6 @@ const index = () => {
     try {
       const response = await auth.sign_up(payload);
       response.status === 200 && setModal(true)
-      console.log(response);
     }catch (error) {
       console.log(error)
     }

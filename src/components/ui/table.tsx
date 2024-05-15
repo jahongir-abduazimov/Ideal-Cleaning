@@ -17,7 +17,7 @@ import useServiceStore from "../../store/service";
 import Notification from "../../utils/notification";
 
 const GlobalTable = ({ headers, body, isLoading, editItem }: TableProps) => {
-  const {deleteData} = useServiceStore();
+  const { deleteData } = useServiceStore();
   const deleteItem = async (id: any) => {
     const status = await deleteData(id);
     if (status === 200) {
@@ -76,7 +76,7 @@ const GlobalTable = ({ headers, body, isLoading, editItem }: TableProps) => {
                                   className="border border-gray-300 p-[9px] rounded-md active:bg-gray-300 duration-150 bg-gray-200 cursor-pointer"
                                   src={edit}
                                   alt="edit"
-                                  onClick={()=>editItem(item)}
+                                  onClick={() => editItem(item)}
                                 />
                               </div>
                             ) : item[header.value] ? (
