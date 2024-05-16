@@ -13,20 +13,8 @@ import { Skeleton } from "@mui/material";
 import { TableProps } from "@global-interface";
 import del from "../../assets/delete-icon.svg";
 import edit from "../../assets/edit-icon.svg";
-import useServiceStore from "../../store/service";
-import Notification from "../../utils/notification";
 
-const GlobalTable = ({ headers, body, isLoading, editItem }: TableProps) => {
-  const { deleteData } = useServiceStore();
-  const deleteItem = async (id: any) => {
-    const status = await deleteData(id);
-    if (status === 200) {
-      Notification({
-        title: "Xizmat muvaffaqiyatli o'chirildi",
-        type: "success",
-      });
-    }
-  };
+const GlobalTable = ({ headers, body, isLoading, editItem, deleteItem }: TableProps) => {
   return (
     <>
       <Box sx={{ width: "100%" }}>

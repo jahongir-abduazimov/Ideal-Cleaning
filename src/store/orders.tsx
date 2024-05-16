@@ -10,9 +10,6 @@ const useOrderStore = create<OrderStore>((set) => ({
       set({ isLoading: true });
       const response = await orders.get_orders(params);
       if (response.status === 200) {
-        response?.data?.orders_list?.forEach((item: any, index: number) => {
-          item.index = index + 1;
-        });
         set({ data: response?.data?.orders_list });
       }
       set({ isLoading: false });
@@ -23,18 +20,31 @@ const useOrderStore = create<OrderStore>((set) => ({
   postOrder: async (data) => {
     try {
       const response = await orders.post_order(data);
-      return response;      
+      if (response.status === 201) {
+        set((state) => ({
+          data:
+            state?.data?.length < 10
+              ? [...state.data, response.data]
+              : [...state.data],
+        }));
+      }
+      return response.status;      
     } catch (error) {
       console.error(error);
     }
   },
-  // deleteOrder: async (id) => {
-  //   try {
-  //     const response = await orders.delete_order(id);
-  //     return response;
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
+  deleteOrder: async (id) => {
+    try {
+      const response = await orders.delete_order(id);
+      if (response.status === 200) {
+        set((state) => ({
+          data: state.data.filter((item: any) => item.id!== id),
+        }));
+      }
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  }
 }));
 export default useOrderStore;

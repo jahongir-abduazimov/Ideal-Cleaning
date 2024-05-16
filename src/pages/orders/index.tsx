@@ -4,20 +4,39 @@ import { IconButton, InputBase, Paper } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { OrderModal } from "@modals";
 import useOrderStore from "../../store/orders";
+import Notification from "@notification";
 const index = () => {
-  const { getOrders, data, isLoading } = useOrderStore();
+  const { getOrders, data, isLoading, deleteOrder } = useOrderStore();
+  
   const [params] = useState({
     page: 1,
     limit: 10,
   });
+  const deleteItem = async (id: any) => {
+    const response = await deleteOrder(id);
+    if (response.status === 200) {
+      Notification({
+        title: "Buyurtma muvaffaqiyatli o'chirildi",
+        type: "success",
+      })
+    }
+  }
 
   useEffect(() => {
     getOrders(params);
   }, [params, getOrders]);
+  data?.forEach((item, index) => {
+    item.index = 
+    params.page * params.limit - 
+    (params.limit - 1) + index
+  })
   const headers = [
     { title: "№", value: "index" },
-    { title: "Buyurtma miqdori", value: "amount" },
+    { title: "Mijoz ismi", value: "client_id" },
+    { title: "Xizmat nomi", value: "service_id" },
     { title: "Buyurma narxi", value: "price" },
+    { title: "Buyurtma miqdori", value: "amount" },
+    { title: "Buyurtma statusi", value: "status" },
     { title: "", value: "action" },
   ];
   return (
@@ -50,6 +69,7 @@ const index = () => {
         body={data}
         isLoading={isLoading}
         editItem={() => {}}
+        deleteItem={deleteItem}
       />
     </div>
   );
