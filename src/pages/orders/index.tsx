@@ -37,6 +37,7 @@ const index = () => {
     }))
   }, [location.search])
   const handleChange = (event: React.ChangeEvent<unknown>, value:number) => {
+    console.log(event);
     setParams(prevParams=> ({
       ...prevParams,
       page: value
