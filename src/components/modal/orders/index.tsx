@@ -36,8 +36,8 @@ export default function BasicModal() {
   });
   const initialValues = {
     amount: "",
-    client_phonenumber: "",
-    cliet_full_name: "",
+    client_phone_number: "",
+    client_full_name: "",
     service_id: "",
   };
   const postData = async (values: any) => {
@@ -84,39 +84,7 @@ export default function BasicModal() {
           >
             <Form>
               <Field
-                name="amount"
-                type="number"
-                as={TextField}
-                label="Buyurtma miqdori"
-                fullWidth
-                margin="normal"
-                variant="outlined"
-                helperText={
-                  <ErrorMessage
-                    name="amount"
-                    component="span"
-                    className="text-[red] text-[15px]"
-                  />
-                }
-              />
-              <Field
-                name="client_phonenumber"
-                type="text"
-                as={TextField}
-                label="Mirozning telefon raqami"
-                fullWidth
-                margin="normal"
-                variant="outlined"
-                helperText={
-                  <ErrorMessage
-                    name="client_phonenumber"
-                    component="span"
-                    className="text-[red] text-[15px]"
-                  />
-                }
-              />
-              <Field
-                name="cliet_full_name"
+                name="client_full_name"
                 type="text"
                 as={TextField}
                 label="Mijozning to'liq ismi"
@@ -125,7 +93,23 @@ export default function BasicModal() {
                 variant="outlined"
                 helperText={
                   <ErrorMessage
-                    name="cliet_full_name"
+                    name="client_full_name"
+                    component="span"
+                    className="text-[red] text-[15px]"
+                  />
+                }
+              />
+              <Field
+                name="client_phone_number"
+                type="text"
+                as={TextField}
+                label="Mirozning telefon raqami"
+                fullWidth
+                margin="normal"
+                variant="outlined"
+                helperText={
+                  <ErrorMessage
+                    name="client_phone_number"
                     component="span"
                     className="text-[red] text-[15px]"
                   />
@@ -153,6 +137,22 @@ export default function BasicModal() {
                   </MenuItem>
                 ))}
               </Field>
+              <Field
+                name="amount"
+                type="number"
+                as={TextField}
+                label="Buyurtma miqdori"
+                fullWidth
+                margin="normal"
+                variant="outlined"
+                helperText={
+                  <ErrorMessage
+                    name="amount"
+                    component="span"
+                    className="text-[red] text-[15px]"
+                  />
+                }
+              />
               <Button
                 type="submit"
                 variant="contained"

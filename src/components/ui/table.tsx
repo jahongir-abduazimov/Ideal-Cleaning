@@ -13,8 +13,12 @@ import { Skeleton } from "@mui/material";
 import { TableProps } from "@global-interface";
 import del from "../../assets/delete-icon.svg";
 import edit from "../../assets/edit-icon.svg";
+import { useSearchParams } from "react-router-dom";
 
 const GlobalTable = ({ headers, body, isLoading, editItem, deleteItem }: TableProps) => {
+  const [searchParams] = useSearchParams()
+  const page = Number(searchParams.get('page')) || 1
+  const limit = Number(searchParams.get('limit')) || 10
   return (
     <>
       <Box sx={{ width: "100%" }}>
@@ -47,7 +51,11 @@ const GlobalTable = ({ headers, body, isLoading, editItem, deleteItem }: TablePr
                     ))
                   : body?.map((item, index) => (
                       <TableRow key={index}>
+                        <TableCell>
+                          {page * limit - (limit - 1) + index}
+                        </TableCell>
                         {headers?.map((header, i) => (
+                          i >= 1 &&
                           <TableCell
                             key={i}
                             className={item[header.value]?.class}

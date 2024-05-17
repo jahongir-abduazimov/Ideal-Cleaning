@@ -1,14 +1,16 @@
 import GlobalTable from "../../components/ui/table";
+import Pagination from "@mui/material/Pagination";
 import { useEffect, useState } from "react";
-import { IconButton, InputBase, Paper } from "@mui/material";
+import { IconButton, InputBase, Paper, Stack } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { OrderModal } from "@modals";
 import useOrderStore from "../../store/orders";
 import Notification from "@notification";
+import { useNavigate } from "react-router-dom";
 const index = () => {
-  const { getOrders, data, isLoading, deleteOrder } = useOrderStore();
-  
-  const [params] = useState({
+  const { getOrders, data, isLoading, deleteOrder, totalCount } = useOrderStore();
+  const navigate = useNavigate();
+  const [params, setParams] = useState({
     page: 1,
     limit: 10,
   });
@@ -25,15 +27,28 @@ const index = () => {
   useEffect(() => {
     getOrders(params);
   }, [params, getOrders]);
-  data?.forEach((item, index) => {
-    item.index = 
-    params.page * params.limit - 
-    (params.limit - 1) + index
-  })
+  useEffect(()=> {
+    const params = new URLSearchParams(location.search);
+    const page = params.get("page");
+    const pageNumber = page ? parseInt(page) : 1
+    setParams(prevParams => ({
+      ...prevParams,
+      page: pageNumber
+    }))
+  }, [location.search])
+  const handleChange = (event: React.ChangeEvent<unknown>, value:number) => {
+    setParams(prevParams=> ({
+      ...prevParams,
+      page: value
+    }))
+    const searchParams = new URLSearchParams(location.search);
+    searchParams.set("page", `${value}`);
+    navigate(`/orders?${searchParams}`)
+  }
   const headers = [
     { title: "№", value: "index" },
-    { title: "Mijoz ismi", value: "client_id" },
-    { title: "Xizmat nomi", value: "service_id" },
+    { title: "Mijoz ismi", value: "client_name" },
+    { title: "Xizmat nomi", value: "service_name" },
     { title: "Buyurma narxi", value: "price" },
     { title: "Buyurtma miqdori", value: "amount" },
     { title: "Buyurtma statusi", value: "status" },
@@ -71,6 +86,9 @@ const index = () => {
         editItem={() => {}}
         deleteItem={deleteItem}
       />
+      <Stack spacing={2}>
+        <Pagination count={totalCount} page={params.page} onChange={handleChange}/>
+      </Stack>
     </div>
   );
 };

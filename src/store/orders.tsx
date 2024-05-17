@@ -5,12 +5,16 @@ import { OrderStore } from "../types/interface/order";
 const useOrderStore = create<OrderStore>((set) => ({
   data: [],
   isLoading: false,
+  totalCount: 1,
   getOrders: async (params) => {
     try {
       set({ isLoading: true });
       const response = await orders.get_orders(params);
       if (response.status === 200) {
-        set({ data: response?.data?.orders_list });
+        set({
+          totalCount: Math.ceil(response.data.total / params.limit),
+          data: response?.data?.orders_list,
+        })
       }
       set({ isLoading: false });
     } catch (error) {

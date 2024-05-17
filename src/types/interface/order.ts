@@ -19,6 +19,7 @@ export interface Request {
 export interface OrderStore {
     data:any[],
     isLoading: boolean,
+    totalCount: number,
     getOrders:(params: GetParams) => Promise<any>,
     postOrder:(data: any) => Promise<any>
     deleteOrder:(id: string) => Promise<any>
