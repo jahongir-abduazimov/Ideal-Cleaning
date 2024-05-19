@@ -1,15 +1,14 @@
 import GlobalTable from "../../components/ui/table";
-import Pagination from "@mui/material/Pagination";
 import { useEffect, useState } from "react";
-import { IconButton, InputBase, Paper, Stack } from "@mui/material";
+import { IconButton, InputBase, Paper } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { OrderModal } from "@modals";
 import useOrderStore from "../../store/orders";
 import Notification from "@notification";
-import { useNavigate } from "react-router-dom";
+import GlobalPagination from "@pagination";
 const index = () => {
-  const { getOrders, data, isLoading, deleteOrder, totalCount } = useOrderStore();
-  const navigate = useNavigate();
+  const { getOrders, data, isLoading, deleteOrder, totalCount } =
+    useOrderStore();
   const [params, setParams] = useState({
     page: 1,
     limit: 10,
@@ -20,32 +19,28 @@ const index = () => {
       Notification({
         title: "Buyurtma muvaffaqiyatli o'chirildi",
         type: "success",
-      })
+      });
     }
-  }
+  };
 
   useEffect(() => {
     getOrders(params);
   }, [params, getOrders]);
-  useEffect(()=> {
+  useEffect(() => {
     const params = new URLSearchParams(location.search);
     const page = params.get("page");
-    const pageNumber = page ? parseInt(page) : 1
-    setParams(prevParams => ({
+    const pageNumber = page ? parseInt(page) : 1;
+    setParams((prevParams) => ({
       ...prevParams,
-      page: pageNumber
-    }))
-  }, [location.search])
-  const handleChange = (event: React.ChangeEvent<unknown>, value:number) => {
-    console.log(event);
-    setParams(prevParams=> ({
+      page: pageNumber,
+    }));
+  }, [location.search]);
+  const changePage = (value: number) => {
+    setParams((prevParams) => ({
       ...prevParams,
-      page: value
-    }))
-    const searchParams = new URLSearchParams(location.search);
-    searchParams.set("page", `${value}`);
-    navigate(`/orders?${searchParams}`)
-  }
+      page: value,
+    }));
+  };
   const headers = [
     { title: "№", value: "index" },
     { title: "Mijoz ismi", value: "client_name" },
@@ -87,9 +82,14 @@ const index = () => {
         editItem={() => {}}
         deleteItem={deleteItem}
       />
-      <Stack spacing={2}>
+      {/* <Stack spacing={2}>
         <Pagination count={totalCount} page={params.page} onChange={handleChange}/>
-      </Stack>
+      </Stack> */}
+      <GlobalPagination
+        totalCount={totalCount}
+        page={params.page}
+        setParams={changePage}
+      />
     </div>
   );
 };

@@ -14,6 +14,7 @@ export default defineConfig({
       { find: '@modals', replacement: '/src/components/modal' },
       { find: '@data-service', replacement: '/src/utils/data-service.ts' },
       { find: '@notification', replacement: '/src/utils/notification.ts' },
+      { find: '@pagination', replacement: '/src/components/ui/pagination.tsx' },
     ]
   }
 })

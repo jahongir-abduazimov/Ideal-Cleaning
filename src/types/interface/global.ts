@@ -20,3 +20,9 @@ export interface TableProps {
     editItem: (id: any) => any,
     deleteItem: (id: any) => any,
 }
+
+export interface PaginationProps {
+    totalCount: number,
+    page: number,
+    setParams: (value:number) => void,
+}

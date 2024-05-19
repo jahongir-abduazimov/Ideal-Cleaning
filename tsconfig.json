@@ -31,6 +31,7 @@
             "@modals": ["./src/components/modal"],
             "@data-service": ["./src/utils/data-service.ts"],
             "@notification": ["./src/utils/notification.ts"],
+            "@pagination": ["./src/components/ui/pagination.tsx"],
 
             
         },
